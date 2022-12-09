@@ -74,6 +74,94 @@
         .text-loading {
             font-size: 2rem;
         }
+
+        /* 弹窗 (background) */
+        .modal {
+            display: none; /* 默认隐藏 */
+            position: fixed;
+            z-index: 1;
+            padding-top: 100px;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgb(0, 0, 0);
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+
+        /* 弹窗内容 */
+        .modal-content {
+            position: relative;
+            background-color: #fefefe;
+            margin: auto;
+            padding: 0;
+            border: 1px solid #888;
+            border-radius: 10px;
+            width: 80%;
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+            -webkit-animation-name: animatetop;
+            -webkit-animation-duration: 0.4s;
+            animation-name: animatetop;
+            animation-duration: 0.4s
+        }
+
+        /* 添加动画 */
+        @-webkit-keyframes animatetop {
+            from {
+                top: -300px;
+                opacity: 0
+            }
+            to {
+                top: 0;
+                opacity: 1
+            }
+        }
+
+        @keyframes animatetop {
+            from {
+                top: -300px;
+                opacity: 0
+            }
+            to {
+                top: 0;
+                opacity: 1
+            }
+        }
+
+        /* 关闭按钮 */
+        .close {
+            color: white;
+            float: right;
+            font-size: 28px;
+            /*font-weight: bold;*/
+        }
+
+        .close:hover,
+        .close:focus {
+            color: #000;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .modal-header {
+            padding: 2px 16px;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+            /*background-color: #5cb85c;*/
+            background: -webkit-linear-gradient(left, rgb(220, 241, 247) 0%, rgb(255, 210, 234) 120%);
+            color: #1b1b44;
+        }
+
+        .modal-body {
+            padding: 2px 16px;
+        }
+
+        .modal-footer {
+            padding: 2px 16px;
+            background-color: #5cb85c;
+            color: white;
+        }
     </style>
 
     <script>
@@ -106,11 +194,70 @@
         <li>
             <input type="file" id="upload" hidden/>
             <label for="upload" style="color: #1b1b44;">选择你想听的音乐～</label>
-            <label class="btn"  style="color: #1b1b44;">本地没有存储音乐？请点我</label>
+            <!--            <label class="btn"  style="color: #1b1b44;">本地没有存储音乐？</label>-->
+            <label id="myBtn" style="color: #1b1b44;">本地没有存储音乐？（弹窗版）</label>
         </li>
     </ul>
 </div>
+<!--&lt;!&ndash; 弹窗 &ndash;&gt;-->
+<!--<div id="myModal" class="modal">-->
+<!--    &lt;!&ndash; 弹窗内容 &ndash;&gt;-->
+<!--    <div class="modal-content">-->
+<!--        <span class="close">&times;</span>-->
+<!--        <label class="btn"  style="color: #1b1b44;">珊瑚海</label>-->
+<!--        <label class="btn"  style="color: #1b1b44;">一生何求</label>-->
+<!--        <label class="btn"  style="color: #1b1b44;">Dancing With Your Ghost</label>-->
+<!--    </div>-->
+<!--</div>-->
+<!-- 弹窗 -->
+<div id="myModal" class="modal">
+    <!-- 弹窗内容 -->
+    <div class="modal-content">
+        <div class="modal-header">
+            <span class="close">&times;</span>
+            <h2>选一个呗～</h2>
+        </div>
+        <div class="modal-body">
+            <h3 style="color: #1b1b44">燕燕乖宝</h3>
+            <label class="btn" style="color: #1b1b44;">珊瑚海</label>
+            <label class="btn" style="color: #1b1b44;">佳人</label>
+            <label class="btn" style="color: #1b1b44;">Mulan</label><br>
+            <label class="btn" style="color: #1b1b44;">最佳损友 (Live)</label>
+            <label class="btn" style="color: #1b1b44;">克林</label>
+            <h3 style="color: #1b1b44">傲娇帅宝</h3>
+            <label class="btn2" style="color: #1b1b44;">一生何求</label>
+            <label class="btn2" style="color: #1b1b44;">Dancing With Your Ghost</label>
+            <label class="btn2" style="color: #1b1b44;">Dancing With A Stranger</label><br>
+        </div>
+    </div>
+</div>
+<script>
+	// 获取弹窗
+	const modal = document.getElementById( 'myModal' );
 
+	// 打开弹窗的按钮对象
+	const btn = document.getElementById( 'myBtn' );
+
+	// 获取 <span> 元素，用于关闭弹窗
+	const span = document.querySelector( '.close' );
+
+	// 点击按钮打开弹窗
+	btn.onclick = function () {
+		modal.style.display = 'block';
+	};
+
+	// 点击 <span> (x), 关闭弹窗
+	span.onclick = function () {
+		modal.style.display = 'none';
+	};
+
+	// 在用户点击其他地方时，关闭弹窗
+	window.onclick = function ( event ) {
+		if (event.target == modal) {
+			modal.style.display = 'none';
+		}
+	};
+</script>
 <script id="rendered-js">
 	// const THREE = ''
 	const {
@@ -165,7 +312,12 @@
 
 	const buttons = document.querySelectorAll( '.btn' );
 	buttons.forEach( ( button, index ) =>
-		button.addEventListener( 'click', () => loadAudio( index ) ) );
+		button.addEventListener( 'click', () => loadAudio( index ) )
+	);
+	const buttons2 = document.querySelectorAll( '.btn2' );
+	buttons2.forEach( ( button, index ) =>
+		button.addEventListener( 'click', () => loadAudio2( index ) )
+	);
 
 
 	function init() {
@@ -236,19 +388,47 @@
 		requestAnimationFrame( animate );
 	}
 
+	// 燕燕乖宝
 	function loadAudio( i ) {
+		// 获取弹窗
+		const modal = document.getElementById( 'myModal' );
+		// 关闭弹窗
+		modal.style.display = 'none';
 		document.getElementById( 'overlay' ).innerHTML =
-			'<div class="text-loading"><label style="color: #1b1b44;font-size: 15px">正在下载音乐，请稍等...</label></div>';
+			'<div class="text-loading"><label style="color: #1b1b44;font-size: 15px">正在加载！别急哦宝宝 mua～</label></div>';
 		const files = [
-			'yishengheqiu.mp3',
-			'https://files.freemusicarchive.org/storage-freemusicarchive-org/music/no_curator/Simon_Panrucker/Happy_Christmas_You_Guys/Simon_Panrucker_-_01_-_Snowflakes_Falling_Down.mp3',
-			'https://files.freemusicarchive.org/storage-freemusicarchive-org/music/no_curator/Dott/This_Christmas/Dott_-_01_-_This_Christmas.mp3',
-			'https://files.freemusicarchive.org/storage-freemusicarchive-org/music/ccCommunity/TRG_Banks/TRG_Banks_Christmas_Album/TRG_Banks_-_12_-_No_room_at_the_inn.mp3',
-			'https://files.freemusicarchive.org/storage-freemusicarchive-org/music/ccCommunity/Mark_Smeby/En_attendant_Nol/Mark_Smeby_-_07_-_Jingle_Bell_Swing.mp3'
+			'./baobao/598092575.mp3',
+			'./baobao/佳人.mp3',
+			'./baobao/Mulan.mp3',
+			'./baobao/最佳损友.mp3',
+			'./baobao/克林.mp3',
 		];
 
 		const file = files[i];
 
+		const loader = new THREE.AudioLoader();
+		loader.load( file, function ( buffer ) {
+			audio.setBuffer( buffer );
+			audio.play();
+			analyser = new THREE.AudioAnalyser( audio, fftSize );
+			init();
+		} );
+	}
+
+	// 傲娇帅宝
+	function loadAudio2( i ) {
+		// 获取弹窗
+		const modal = document.getElementById( 'myModal' );
+		// 关闭弹窗
+		modal.style.display = 'none';
+		document.getElementById( 'overlay' ).innerHTML =
+			'<div class="text-loading"><label style="color: #1b1b44;font-size: 15px">正在加载！别急哦宝宝 mua～</label></div>';
+		const files = [
+			'yishengheqiu.mp3',
+			'Dancing With Your Ghost.mp3',
+			'Dancing With A Stranger.mp3',
+		];
+		const file = files[i];
 		const loader = new THREE.AudioLoader();
 		loader.load( file, function ( buffer ) {
 			audio.setBuffer( buffer );
@@ -360,7 +540,7 @@
 			positions.push( z + rand( - 0.3 * modifier, 0.3 * modifier ) );
 
 			color.setHSL( map( i, 0, totalPoints, 1.0, 0.0 ), 1.0, 0.5 );
-			color.set( randChoise( [ '#f2b9b2', '#f2b9b2', '#f03752', '#e77c8e', '#add5a2' ] ) );
+			color.set( randChoise( [ '#f2b9b2', '#f2b9b2', '#f03752', '#e77c8e', '#12a182' ] ) );
 			colors.push( color.r, color.g, color.b );
 			phases.push( rand( 1000 ) );
 			sizes.push( 1 );
